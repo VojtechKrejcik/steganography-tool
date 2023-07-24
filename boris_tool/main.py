@@ -1,4 +1,4 @@
-#  python3 main.py -i image.jpeg -m msg.txt
+#  python3 main.py -i image.png -m msg.txt
 #  python3 main.py -i stego_image.png -m extracted_message.txt -e
 from PIL import Image
 import argparse
@@ -111,9 +111,9 @@ def extract_message(image_path, output_path):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Hide and extract a text file inside a JPEG image.")
+    parser = argparse.ArgumentParser(description="Hide and extract a text file inside a PNG image.")
     parser.add_argument("-m", "--message", help="Path to the message text file.")
-    parser.add_argument("-i", "--image", help="Path to the input JPEG image.")
+    parser.add_argument("-i", "--image", help="Path to the input PNG image.")
     parser.add_argument("-e", "--extract", action="store_true", help="Extract the message from the image.")
 
     args = parser.parse_args()
