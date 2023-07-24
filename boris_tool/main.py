@@ -86,7 +86,6 @@ def extract_message(image_path, output_path):
             binary_message_length = binary_message_length[32:]
             break
 
-    i = 0
     for pixel in pixels:
         r, g, b = pixel
 
@@ -95,14 +94,12 @@ def extract_message(image_path, output_path):
         binary_message += str(g & 1)
         binary_message += str(b & 1)
 
-        if len(binary_message) >= original_message_length * 8 + 32:
+        if len(binary_message) -32 >= original_message_length * 8:
             break
-
-    binary_message = binary_message[32:]
 
     # Convert binary message to text
     message = ''
-    for i in range(0, len(binary_message), 8):
+    for i in range(32, len(binary_message), 8):
         byte = binary_message[i:i + 8]
         message += chr(int(byte, 2))
 
