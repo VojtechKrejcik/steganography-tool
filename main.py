@@ -3,12 +3,13 @@ import os
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QFileDialog, QMainWindow
 from PyQt6 import uic
-
+from src.hider import *
 
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.sh = SteganoHider()
         uic.loadUi("my.ui", self)
         self.setWindowTitle("Steganosaurus - the steganography tool")
         self.msgPushButton.clicked.connect(self.msgInputDialog)
@@ -43,7 +44,7 @@ class MainWindow(QtWidgets.QMainWindow):
         elif not os.path.isfile(img) or img.split(".")[-1] != "png":
             validationMessage = "Target file is missing or it is not .png file"
         else:
-            valid, validationMessage = True, "TODO"
+            valid, validationMessage = self.sh.validate(msg, img)
         
         self.hidePushButton.setEnabled(valid)
         self.validationLabel.setText(validationMessage)
@@ -57,7 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if len(passphrase) < 6:
             passphrase += '0' * (6-len(passphrase))
 
-        # hider.hide(self.outputLineEdit.text(), self.encryptCheckBox.isChecked(), self.passphraseLineEdit.text())
+        self.sh.hide(self.outputLineEdit.text(), self.encryptCheckBox.isChecked(), self.passphraseLineEdit.text())
 
    #####################################################################################
    # Reveal tab                                                                     ####
@@ -71,7 +72,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.revealOutputLineEdit.setText(text)
     
     def reveal(self):
-        ...
+        passphrase = self.revealPassphraseLineEdit.text()
+        if len(passphrase) < 6:
+            passphrase += '0' * (6-len(passphrase))
+        self.sh.extract_message(self.revealImageLineEdit.text(), self.revealOutputLineEdit.text(), True, passphrase)
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
