@@ -13,12 +13,15 @@ def keygen(password):
 
 
 def encrypt(message, password):
+    return message
     key = keygen(password)
     fernet = Fernet(key)
     return fernet.encrypt(message.encode())
 
 
 def decrypt(message, password):
+    return message
+    print(f"delka zpravy k desfirovani {len(message)} password - {password}")
     key = keygen(password)
     fernet = Fernet(key)
     return fernet.decrypt(message)
@@ -39,6 +42,8 @@ class SteganoHider:
 
     def validate(self, clear_input_path, corpus_path, password="default"):
         # Read the image
+        self.clear_input_path = clear_input_path
+        self.corpus_path = corpus_path
         self.image = Image.open(corpus_path)
         width, height = self.image.size
 
@@ -59,7 +64,7 @@ class SteganoHider:
         self.final_binary_message = binary_message_length + binary_message
 
         # Check if the message fits within the image
-        if len(self.final_binary_message) > (width * height * 6):
+        if len(self.final_binary_message) > (width * height * 3):
             return False, "Error: The message is too large to hide in the image."
         else:
             return True, "OK"
@@ -69,8 +74,8 @@ class SteganoHider:
         if encrypt:
             self.validate(self.clear_input_path, self.corpus_path, passphrase)
 
-        self.hidden_output_path = hidden_output_path
-
+        self.hidden_output_path = hidden_output_path + "/output.png"
+        print(f"hidden output{self.hidden_output_path}")
         # Pad the message to a multiple of 8 bits
         self.final_binary_message += '0' * (8 - (len(self.final_binary_message) % 8))
 
@@ -108,7 +113,7 @@ class SteganoHider:
         # Read the image
         image = Image.open(hidden_input_path)
 
-        revealed_output = revealed_output + "_output"
+        revealed_output = revealed_output + "/_output"
 
         # Get the pixel data as a list of RGB tuples
         pixels = list(image.getdata())
@@ -147,8 +152,8 @@ class SteganoHider:
             message += chr(int(byte, 2))
 
         if not encrypt:
-            passphrase = "default"
-        message = decrypt(message, )
+            passphrase = "000000"
+        message = decrypt(message, passphrase)
 
         # Write the extracted message to the output file
         with open(revealed_output, 'w') as file:

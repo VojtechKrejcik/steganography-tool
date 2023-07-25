@@ -18,6 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.msgLineEdit.textChanged.connect(self.validate)
         self.imageLineEdit.textChanged.connect(self.validate)
         self.encryptCheckBox.stateChanged.connect(self.checkboxChanged)
+        self.hidePushButton.clicked.connect(self.hide)
         # Reveal tab
         self.revealImagePushButton.clicked.connect(self.revealImageDialog)
         self.revealOutputPushButton.clicked.connect(self.revealOutputDialog)
@@ -53,12 +54,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.passphraseLineEdit.setEnabled(self.encryptCheckBox.isChecked())
             
     def hide(self):
-        ...
+        print("HIDE")
         passphrase = self.passphraseLineEdit.text()
         if len(passphrase) < 6:
             passphrase += '0' * (6-len(passphrase))
 
-        self.sh.hide(self.outputLineEdit.text(), self.encryptCheckBox.isChecked(), self.passphraseLineEdit.text())
+        self.sh.hide_message(self.outputLineEdit.text(), self.encryptCheckBox.isChecked(), self.passphraseLineEdit.text())
 
    #####################################################################################
    # Reveal tab                                                                     ####
