@@ -17,6 +17,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.msgLineEdit.textChanged.connect(self.validate)
         self.imageLineEdit.textChanged.connect(self.validate)
         self.encryptCheckBox.stateChanged.connect(self.checkboxChanged)
+        # Reveal tab
+        self.revealImagePushButton.clicked.connect(self.revealImageDialog)
+        self.revealOutputPushButton.clicked.connect(self.revealOutputDialog)
+        self.revealPushButton.clicked.connect(self.reveal)
 
     def msgInputDialog(self):
         text, ok = QFileDialog.getOpenFileName(self, 'Open file', '', 'All files (*)')
@@ -55,7 +59,20 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # hider.hide(self.outputLineEdit.text(), self.encryptCheckBox.isChecked(), self.passphraseLineEdit.text())
 
+   #####################################################################################
+   # Reveal tab                                                                     ####
+   #####################################################################################
+    def revealImageDialog(self):
+        text, ok = QFileDialog.getOpenFileName(self, 'Open file', '', 'Image (*.png)')
+        self.revealImageLineEdit.setText(text)
+
+    def revealOutputDialog(self):
+        text = QFileDialog.getExistingDirectory(self, 'Choose directory')
+        self.revealOutputLineEdit.setText(text)
     
+    def reveal(self):
+        ...
+
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()
